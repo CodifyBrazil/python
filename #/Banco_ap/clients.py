@@ -59,11 +59,15 @@ class Bank:
             return 'Erro, o usuario NÂO foi criado!'
 
     def clients_view(self, cpf=''):
-        DB = database3.Database()
-        clients = DB.get_clients_all()
+
         if cpf != '' or cpf != ' ':
+            DB = database3.Database()
+            clients = DB.get_clients_all()
+
+            client_info = []
+
             for ck, cv in clients.items():
-                print(cv)
+                print(ck, cv)
 
 
 
@@ -78,6 +82,8 @@ class Bank:
 
 
 
+b = Bank()
 
+print(b.clients_view('123.456.789-01'))
 
 
