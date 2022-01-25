@@ -13,7 +13,7 @@ class Database:
 
     def __init__(self):
         self.security = security.Security()
-        self.acess_link = ''
+        self.acess_link = 'link'
         self.hash_token = self.security.hash_generator_uuid()
         self.date_time = datetime.today().strftime('%H-%m-%d %H:%M:%S')
 
