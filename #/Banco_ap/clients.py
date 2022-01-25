@@ -1,45 +1,21 @@
 import database3
 import random
 
-
-clients = {'123.456.789-00':
-        {'Id_banco': 'Itau', 'Agencia': '0123', 'Conta': '0458', 'Cliente': 'Julio Almeida', 'Saldo': 0},
-    '987.654.321-00':
-    {'Id_banco': 'Caixa Economica', 'Agencia': '0154', 'Conta': '0148', 'Cliente': 'Fausto Alencar', 'Saldo': 0},
-    '123.456.789-01':
-    {'Id_banco': 'Santander', 'Agencia': '0164', 'Conta': '0146', 'Cliente': 'Bruno Souza', 'Saldo': 0},
-    '123.45.789-02':
-    {'Id_banco': 'NuBank', 'Agencia': '0648', 'Conta': '0163', 'Cliente': 'Camila Alves', 'Saldo': 0},
-            '123.456.789-03':
-    {'Id_banco': 'Banco do Brasil', 'Agencia': '0184', 'Conta': '0954', 'Cliente': 'Gisele Suzano', 'Saldo': 0},
-}
-
-tranfer = {
-    'HashTransferenciaUnica':{
-        'CPF_Origem': {'Id_banco': 'Itau', 'data/hora': 'data/hora'},
-        'CPF_destino': {'Id_banco': 'Itau', 'data/hora': 'data/hora'},
-        'Valor': 10
-        }
-}
-
-deposit = {'data/hora': {'agencia': 'agencia', 'conta':'conta', 'Valor': 'valor'}
-}
-
-
 class Bank:
 
 #Nome do nosso banco = Direct Bank
 #Agencia padrao Direct Bank = 00001
 
     def __init__(self):
-        self.nome = ''
+        self.name = ''
         self.cpf = ''
-        self.id_banco = 'Direct Bank'
-        self.agencia = '00001'
-        self.conta_corrente = 0
-        self.saldo = 0
+        self.id_bank = 'Direct Bank'
+        self.agency = '00001'
+        self.account = 0
+        self.balance = 0
+        self.database = database3.Database()
 
-    def create_account(self, nome, cpf):
+    def create_account(self, name, cpf):
         '''
         :param self: Class
         :param nome: nome do cliente
@@ -47,43 +23,38 @@ class Bank:
         :return: retorna dados do cliente criado (nome, banco, cpf, saldo, agencia, conta)
         '''
 
-        if nome != '' or nome != ' ' and cpf.isnumeric():
-            self.nome = nome
+        if name != '' or name != ' ' and cpf.isnumeric():
+            self.name = name
             self.cpf = cpf
-            self.conta_corrente = random.randrange(10000, 99999)
-            clientes[cpf] = {'Id_banco': self.id_banco, 'Agencia': self.agencia, 'Conta': self.conta_corrente, 'Cliente': self.nome, 'Saldo': self.saldo}
+            self.account = random.randrange(10000, 99999)
 
-            mensage = 'Cliente cadastrado com sucesso!'
-            return mensage
+            if self.database.create_account(name=name, cpf=cpf, id_bank=self.id_bank, agency=self.agency, account=self.account, balance=0, type_data='client_account'):
+                mensage = 'Cliente cadastrado com sucesso!'
+                return mensage
+            else:
+                return 'ERRO! O usuario NÂO foi criado!'
         else:
-            return 'Erro, o usuario NÂO foi criado!'
+            print('Erro! nome vazio ou cpf invalido.')
 
     def clients_view(self, cpf=''):
+        '''
+        :param cpf: insera um CPF para ser consultado.
+        :return: retorna os dados do cliente.
+        '''
 
-        if cpf != '' or cpf != ' ':
-            DB = database3.Database()
-            clients = DB.get_clients_all()
+        if cpf != '' and cpf != ' ':
+            response = self.database.check_costumer_exists(cpf)
 
-            client_info = []
-
-            for ck, cv in clients.items():
-                print(ck, cv)
-
-
-
+            if response:
+                return True
+            else:
+                return False
         else:
-            return 'Digite um CPF.'
+            return 'Digite um cpf'
 
 
     def deposit(self):
         pass
 
-
-
-
-
-b = Bank()
-
-print(b.clients_view('123.456.789-01'))
 
 
