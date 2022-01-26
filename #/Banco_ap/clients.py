@@ -14,6 +14,29 @@ class Bank:
         self.account = 0
         self.balance = 0
         self.database = database3.Database()
+        self.loggin = False
+
+    def start_bank(self):
+        if self.loggin == False:
+            print('''
+                ###########################################################
+                ##################### DIRECT BANK #########################
+                ###########################################################
+                
+                Seja bem vindo, escolha as opções abaixo:
+                
+                [ 1 ] - Entrar em minha conta
+                [ 2 ] - Criar minha conta
+            
+            ''')
+
+        options = input('Digite sua opção: ')
+
+        if options == 1:
+            
+
+
+
 
     def create_account(self, name, cpf):
         '''

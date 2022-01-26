@@ -13,27 +13,31 @@ class Database:
 
     def __init__(self):
         self.security = security.Security()
-        self.acess_link = 'link'
+        self.acess_link = 'https://banking-london-default-rtdb.firebaseio.com/.json'
         self.hash_token = self.security.hash_generator_uuid()
         self.date_time = datetime.today().strftime('%H-%m-%d %H:%M:%S')
 
     def check_costumer_exists(self, cpf=''):
+        '''
+            Checa se o usuario existe através do CPF
+
+
+        :param cpf: CPF do usuarioi que deseja ver se existe
+        :return: retorna True para existente, e False para Inexistente
+        '''
+
         if cpf != '' and cpf != ' ':
             request = requests.get(self.acess_link)
             request = request.json()
-            list_cpfs = []
+            cks = [ck for ck, cv in request.items()]
 
-            for i in range(1, len(request)):
-                for ck, cv in request[i].items():
-                    if ck == 'cpf':
-                        list_cpfs.append(cv)
+            for i in cks:
+                for k, v in request[i].items():
+                    if k == cpf:
+                        if v['type_data'] == 'Client_account':
+                            print(k, v)
+                        print('----------------------')
 
-
-        if cpf in list_cpfs:
-            return True
-
-        else:
-            return False
 
     def get_clients_all(self):
         request = requests.get(self.acess_link)
@@ -51,7 +55,7 @@ class Database:
                   'Saldo': self.saldo
                 }
             '''
-            data = {'Id_bank': id_bank, 'Agency': agency, 'Account': account, 'Client_name': name, 'Balance': balance, 'Date_time_create_account': self.date_time, 'type_data': type_data}
+            data = {cpf:{'Id_bank': id_bank, 'Agency': agency, 'Account': account, 'Client_name': name, 'Balance': balance, 'Date_time_create_account': self.date_time, 'type_data': 'Client_account'}}
             data = json.dumps(data)
             request = requests.post(self.acess_link, data)
             return request
